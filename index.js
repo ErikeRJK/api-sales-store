@@ -5,33 +5,18 @@ const database = require("./src/config/database")
 const app = express();
 const port = 4505;
 
-const db = []
-
 app.use(express.json());
 
-app.get("/", (req, res) => {
-    res.send("Olá Mundo!")
+app.get("/products", async (req,res) =>{
+    const result = await database.query(`SELECT * FROM products ORDER BY id ASC;`)
+    res.send(result.rows)
 })
 
-app.post("/products", (req, res) => {
-    const name = req.body.name;
-    const {price, category} = req.body;
-
-    if(!name || !price || !category){
-        return res.status(400).send("Por favor, preencha todos os campos")
-    }
-
-    db.push({
-        name,
-        category,
-        price
-    })
-
-    res.status(201).send("produto criado com sucesso !")
-})
-
-app.get("/products", (req, res) =>{
-    res.send(db)
+app.post("/products", async (req, res) =>{
+    const {name, price, category_id} = req.body
+    const result = await database.query(`INSERT INTO products (name, price, category_id)
+        VALUES ($1, $2, $3) returning *;`, [name, price, category_id])
+    res.send(result.rows[0])
 })
 
 app.listen(port, () => {
