@@ -9,5 +9,6 @@ router.post("/products", productMiddleware.validateCreateProduct, productsContro
 router.delete("/products/:id", productMiddleware.validateDeleteProduct, productsController.deleteProduct)
 router.put("/products/:id", productMiddleware.validateUpdateProduct, productsController.updateProduct)
 router.get("/products/:id", productMiddleware.validateGetSearchById, productsController.getSearchById)
+router.get("/products/name/:name", productMiddleware.validateGetSearchProductForName, productsController.getSearchProductForName)
 
 module.exports = router;

@@ -9,22 +9,6 @@ const port = 4505;
 app.use(express.json());
 app.use("/", routesProducts)
 
-app.get("/products/name/:name", async (req,res) =>{
-
-    const { name } = req.params
-
-    if(!name){
-        return res.status(400).send({error: "Nome, preço e categoria são obrigatórios."})
-    }
-    try {
-        const result = await database.query(`SELECT * FROM products WHERE name = $1;`, [name])
-        res.status(201).send(result.rows)
-    } catch (error) {
-        console.error("Erro ao buscar produtos", error)
-        res.status(500).send({error: "Erro ao buscar produtos"})
-    }
-})
-
 app.get("/products/listar/name/:name", async (req,res) =>{
 
     const { name } = req.params

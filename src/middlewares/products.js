@@ -37,9 +37,20 @@ function validateGetSearchById(req, res, next){
     next()
 }
 
+function validateGetSearchProductForName(req, res, next){
+    const { name } = req.params
+
+    if(!name){
+        return res.status(400).send({error: "Nome, preço e categoria são obrigatórios."})
+    }
+
+    next()
+}
+
 module.exports = {
     validateCreateProduct,
     validateDeleteProduct,
     validateUpdateProduct,
-    validateGetSearchById
+    validateGetSearchById,
+    validateGetSearchProductForName
 }

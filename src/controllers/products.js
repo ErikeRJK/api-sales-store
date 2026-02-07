@@ -64,10 +64,23 @@ async function getSearchById(req, res){
     }
 }
 
+async function getSearchProductForName(req, res){
+    const { name } = req.params
+
+    try {
+        const result = await productsModel.query(`SELECT * FROM products WHERE name = $1;`, [name])
+        res.status(201).send(result.rows)
+    } catch (error) {
+        console.error("Erro ao buscar produtos", error)
+        res.status(500).send({error: "Erro ao buscar produtos"})
+    }
+}
+
 module.exports ={
     getAllProducts,
     createProduct,
     deleteProduct,
     updateProduct,
-    getSearchById
+    getSearchById,
+    getSearchProductForName
 }
