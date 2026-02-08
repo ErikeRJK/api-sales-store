@@ -88,6 +88,19 @@ async function getSearchListProductForName(req, res){
     }
 }
 
+async function pathPriceId(req, res){
+    const {id} = req.params
+    const {price} = req.body
+
+    try {
+        const result = await productsModel.query(`UPDATE products SET price = $1 WHERE id = $2 RETURNING *;`, [price, id])
+        res.status(201).send(result.rows[0])
+    } catch (error) {
+        console.error("Erro ao buscar produtos", error)
+        res.status(500).send({error: "Erro ao buscar produtos"})
+    }
+}
+
 module.exports ={
     getAllProducts,
     createProduct,
@@ -95,5 +108,6 @@ module.exports ={
     updateProduct,
     getSearchById,
     getSearchProductForName,
-    getSearchListProductForName
+    getSearchListProductForName,
+    pathPriceId
 }

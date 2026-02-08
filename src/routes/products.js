@@ -11,5 +11,6 @@ router.put("/products/:id", productMiddleware.validateUpdateProduct, productsCon
 router.get("/products/:id", productMiddleware.validateGetSearchById, productsController.getSearchById)
 router.get("/products/name/:name", productMiddleware.validateGetSearchProductForName, productsController.getSearchProductForName)
 router.get("/products/listar/name/:name", productMiddleware.validateGetSearchListProductForName, productsController.getSearchListProductForName)
+router.patch("/products/price/:id", productMiddleware.validatePathPriceForId, productsController.pathPriceId)
 
 module.exports = router;

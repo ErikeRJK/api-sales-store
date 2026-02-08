@@ -53,6 +53,18 @@ function validateGetSearchListProductForName(req, res, next){
     if(!name){
         return res.status(400).send({error: "Nome, preço e categoria são obrigatórios."})
     }
+    next()
+}
+
+function validatePathPriceForId(req, res, next){
+    const {id} = req.params
+    const {price} = req.body
+
+    if(!id || !price){
+        return res.status(400).send({error: "id e price são campos Obrigatorios."})
+    }
+
+    next()
 }
 
 module.exports = {
@@ -61,5 +73,6 @@ module.exports = {
     validateUpdateProduct,
     validateGetSearchById,
     validateGetSearchProductForName,
-    validateGetSearchListProductForName
+    validateGetSearchListProductForName,
+    validatePathPriceForId
 }
