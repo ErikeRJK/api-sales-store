@@ -2,13 +2,15 @@ const productsModel = require("../models/products")
 
 async function getAllProducts(req, res) {
     try {
-        const result = await productsModel.query(`SELECT * FROM products ORDER BY id ASC;`)
+        const result = await productsModel.findAll({
+            order: [['id', 'DESC']]
+        })
         
-        if(result.rows.length === 0) {
+        if(!result) {
             return res.status(404).send({ message: "Nenhum produto encontrado." })
         }
 
-        res.status(200).send(result.rows)
+        res.status(200).send(result)
     } catch (error) {
         console.error("Erro ao buscar produtos", error)
         res.status(500).send({error: "Erro ao buscar produtos"})
