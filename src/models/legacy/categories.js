@@ -1,4 +1,4 @@
-const categoriesModel = require("../config/database");
+const categoriesModel = require("../../config/database");
 
 const sql = `
     CREATE TABLE IF NOT EXISTS categories (

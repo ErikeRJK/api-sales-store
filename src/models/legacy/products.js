@@ -1,4 +1,4 @@
-const productsModel = require ("../config/database");
+const productsModel = require ("../../config/database");
 
 const sql = `
     CREATE TABLE IF NOT EXISTS products (
