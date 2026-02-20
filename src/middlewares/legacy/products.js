@@ -1,3 +1,5 @@
+const productsModel = require("../../models/products")
+
 function validateCreateProduct(req,res,next){
     const {name, price, category_id} = req.body
 
@@ -8,7 +10,20 @@ function validateCreateProduct(req,res,next){
     next()
 }
 
-function validateDeleteProduct(req, res, next){
+async function validateDeleteProduct(req, res, next){
+
+    const { id } = req.params
+
+    const product = await productsModel.findByPk(id)
+
+    if(!product){
+        return res.status(404).send({message: `Produto com ${id} não encontrado`})
+    }
+
+    next()
+}
+
+function validateProductNoId(req, res, next){
     const { id } = req.params
 
     if(!id){
@@ -17,9 +32,15 @@ function validateDeleteProduct(req, res, next){
     next()
 }
 
-function validateUpdateProduct(req, res, next){
+async function validateUpdateProduct(req, res, next){
     const { id } = req.params
     const {name, price, category_id} = req.body
+
+    const produto = await validateExisteIdProduct(id)
+
+    if(!produto){
+        return res.status(404).send({message: `Produto com ${id} não encontrado`})
+    }
 
     if(!id || !name || !price || !category_id){
         return res.status(400).send({error: "Id, nome, preço e categoria são campos obrigatórios."})
@@ -27,13 +48,16 @@ function validateUpdateProduct(req, res, next){
     next()
 }
 
-function validateGetSearchById(req, res, next){
+async function validateGetSearchById(req, res, next){
     
     const { id } = req.params
 
-    if(!id){
-        return res.status(400).send({error: "Nome, preço e categoria são obrigatórios."})
+    const produto = await validateExisteIdProduct(id)
+
+    if(!produto){
+        return res.status(404).send({message: `Produto com ${id} não encontrado`})
     }
+
     next()
 }
 
@@ -56,15 +80,27 @@ function validateGetSearchListProductForName(req, res, next){
     next()
 }
 
-function validatePathPriceForId(req, res, next){
+async function validatePathPriceForId(req, res, next){
     const {id} = req.params
     const {price} = req.body
 
-    if(!id || !price){
-        return res.status(400).send({error: "id e price são campos Obrigatorios."})
+    if(!price){
+        return res.status(400).send({error: "preço é um campo Obrigatorios."})
+    }
+
+    const produto = await validateExisteIdProduct(id)
+
+    if(!produto){
+        return res.status(404).send({message: `Produto com ${id} não encontrado`})
     }
 
     next()
+}
+
+async function validateExisteIdProduct(id){
+    const product = await productsModel.findByPk(id)
+
+    return product
 }
 
 module.exports = {
@@ -74,5 +110,7 @@ module.exports = {
     validateGetSearchById,
     validateGetSearchProductForName,
     validateGetSearchListProductForName,
-    validatePathPriceForId
+    validatePathPriceForId,
+    validateProductNoId,
+    
 }

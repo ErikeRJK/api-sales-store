@@ -1,4 +1,5 @@
-const productsModel = require("../models/products")
+const { where, Op } = require("sequelize")
+const productsModel = require("../../models/products")
 
 async function getAllProducts(req, res) {
     try {
@@ -20,9 +21,10 @@ async function getAllProducts(req, res) {
 async function createProduct(req, res) {
     const {name, price, category_id} = req.body
     try {
-        const result = await productsModel.query(`INSERT INTO products (name, price, category_id)
-            VALUES ($1, $2, $3) RETURNING *;`, [name, price, category_id])
-        res.status(201).send(result.rows[0])
+        const result = await productsModel.create({
+            name, price, category_id
+        })
+        res.status(201).send(result)
     } catch (error) {
         console.error("Erro ao buscar produtos", error)
         res.status(500).send({error: "Erro ao buscar produtos"})
@@ -33,8 +35,10 @@ async function deleteProduct(req,res){
     const { id } = req.params
 
     try { 
-        const result = await productsModel.query(`DELETE FROM products WHERE id = $1 RETURNING *;`, [id])
-        res.status(201).send(result.rows[0])
+        await productsModel.destroy({
+            where: {id}
+        })
+        res.status(200).send({message: `produto com Id ${id} deletado com sucesso !`})
     } catch (error) {
         console.error("Erro ao buscar produtos", error)
         res.status(500).send({error: "Erro ao buscar produtos"})
@@ -45,9 +49,8 @@ async function updateProduct(req,res){
     const { id } = req.params
     const {name, price, category_id} = req.body
     try {
-        const result = await productsModel.query(`UPDATE products SET name = $1, price = $2, category_id = $3
-            WHERE id = $4 RETURNING *;`, [name, price, category_id, id])
-        res.status(201).send(result.rows[0])
+        await productsModel.update({name, price, category_id}, { where: {id}})
+        res.status(200).send({message: `produto com Id ${id} atualizado com sucesso !`})
     } catch (error) {
         console.error("Erro ao buscar produtos", error)
         res.status(500).send({error: "Erro ao buscar produtos"})
@@ -58,8 +61,13 @@ async function getSearchById(req, res){
     const { id } = req.params
 
     try {
-        const result = await productsModel.query(`SELECT * FROM products WHERE id = $1;`, [id])
-        res.status(200).send(result.rows[0])
+        const result = await productsModel.findByPk(id)
+
+        if(!result) {
+            return res.status(404).send({message: `produto com id ${id} não encontrado`})
+        }
+
+        res.status(200).send(result)
     } catch (error) {
         console.error("Erro ao buscar produtos", error)
         res.status(500).send({error: "Erro ao buscar produtos"})
@@ -82,11 +90,18 @@ async function getSearchListProductForName(req, res){
     const { name } = req.params
 
     try {
-        const result = await productsModel.query(`SELECT * FROM products WHERE name ILIKE $1`,[`%${name}%`])
-        res.status(201).send(result.rows)
+        // const result = await productsModel.query(`SELECT * FROM products WHERE name ILIKE $1`,[`%${name}%`])
+        const result = await productsModel.findAll({
+            where:{
+                name: {
+                    [Op.iLike]: `%${name}%`
+                }
+            }
+        })
+        res.status(200).send(result)
     } catch (error) {
-        console.error("Erro ao buscar produtos", error)
-        res.status(500).send({error: "Erro ao buscar produtos"})
+        console.error("Erro ao buscar produtos por ID", error)
+        res.status(500).send({error: "Erro ao buscar produtos por ID"})
     }
 }
 
@@ -95,8 +110,8 @@ async function pathPriceId(req, res){
     const {price} = req.body
 
     try {
-        const result = await productsModel.query(`UPDATE products SET price = $1 WHERE id = $2 RETURNING *;`, [price, id])
-        res.status(201).send(result.rows[0])
+        await productsModel.update({price }, {where: {id}})
+        res.status(201).send({message: `O preço do produto com Id: ${ id} foi atualizado com sucesso, novo valor: ${price} !`})
     } catch (error) {
         console.error("Erro ao buscar produtos", error)
         res.status(500).send({error: "Erro ao buscar produtos"})
