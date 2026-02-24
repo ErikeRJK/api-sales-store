@@ -48,7 +48,7 @@ const Products = sequelize.define("Products", {
         type: DataTypes.STRING,
         allowNull: false
     },
-    return: {
+    return_policy : {
         type: DataTypes.STRING,
         allowNull: false
     }
