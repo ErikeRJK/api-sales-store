@@ -1,35 +1,12 @@
-const { Categories } = require("../models/categories");
+const { Categories } = require("../models");
 
 async function validateCreateProducts(req, res, next) {
-  const {
-    name,
-    price,
-    original_price,
-    category_id,
-    is_new,
-    description,
-    specfications,
-    shipping,
-    warranty,
-    return_policy,
-  } = req.body;
+  
+  const { name, price, original_price, category_id, is_new, description, specfications, shipping, warranty, return_policy } = req.body
 
-  if (
-    !name ||
-    !price ||
-    !category_id ||
-    is_new ||
-    !shipping ||
-    !warranty ||
-    !return_policy
-  ) {
-    return res
-      .status(400)
-      .send({
-        error:
-          "Os campos name, price, category_id, is_new, shipping, warranty e return_policy são obrigatórios.",
-      });
-  }
+    if( !name || !price || !category_id || !is_new || !shipping || !warranty || !return_policy){
+        return res.status(400).send({ error: "Os campos name, price, category_id, is_new, shipping, warranty, return_policy são obrigatórios."})
+    }
 
   if (name.length > 255) {
     return res

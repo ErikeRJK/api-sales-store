@@ -11,16 +11,20 @@ async function createProduct(req, res){
         category_id,
         is_new,
         description,
-        specfications,
+        specifications,
         shipping,
         warranty,
         return: return_policy
+        
      })
-
      res.status(201).send(newProduct)
    } catch (error) {
-    
-   }
+   console.error("ERRO COMPLETO:", error)
+   res.status(500).json({
+      message: "Erro ao criar produto",
+      error: error.message
+   })
+}
 }
 
 module.exports = {

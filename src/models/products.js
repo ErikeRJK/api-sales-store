@@ -4,7 +4,7 @@ const { DataTypes } = require("sequelize");
 const Products = sequelize.define("Products", {
     id: {
         type: DataTypes.UUID,
-        defaultValue: DataTypes.STRING,
+        defaultValue: DataTypes.UUIDV4,
         primaryKey: true
     },
     name: {
@@ -48,7 +48,7 @@ const Products = sequelize.define("Products", {
         type: DataTypes.STRING,
         allowNull: false
     },
-    return_policy : {
+    return : {
         type: DataTypes.STRING,
         allowNull: false
     }
