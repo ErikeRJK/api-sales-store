@@ -23,6 +23,12 @@ async function validateLogin(req, res, next){
             })
         }
 
+        if(!user.active){
+            return res.status(401).send({
+                error: "Usuário inativo !"
+            })
+        }
+
         const matchPassword = await bcrypt.compare(password, user.password)
 
         if(!matchPassword){

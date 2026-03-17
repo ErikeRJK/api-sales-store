@@ -3,7 +3,7 @@ const express = require("express");
 const routesProducts = require("./src/routes/products")
 const routesCategories = require("./src/routes/categories")
 const routesUsers = require("./src/routes/users")
-const routesLogin = require("./src/routes/login")
+const routesAuth = require("./src/routes/auth")
 const cors = require("cors")
 
 require("./src/models")
@@ -16,7 +16,7 @@ app.use(cors())
 app.use("/", routesProducts)
 app.use("/", routesCategories)
 app.use(routesUsers)
-app.use(routesLogin)
+app.use(routesAuth)
 
 app.listen(port, () => {
     console.log(`Servidor rodando na porta ${port}`)

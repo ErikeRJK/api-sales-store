@@ -27,6 +27,24 @@ async function login(req, res){
     }
 }
 
+async function profile(req, res) {
+    const user = req.user;
+
+    try {
+        return res.send({
+            id: user.id,
+            name: user.name,
+            email: user.email,
+            role: user.role
+        })
+    } catch (error) {
+        return res.status(500).send({
+            error: error.message
+        })
+    }
+}
+
 module.exports = {
-    login
+    login,
+    profile
 }
