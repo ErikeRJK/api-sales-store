@@ -1,7 +1,7 @@
 const jwt = require("jsonwebtoken");
 const { Users } = require("../models");
 
-function authToken() {
+function authToken(allowedRoles = [""]) {
     return async (req, res, next) => {
         const token = req.headers.authorization;
 
@@ -25,6 +25,12 @@ function authToken() {
             if(!user.active){
                 return res.status(401).send({
                     error: "Usuário inativo!"
+                })
+            }
+
+            if(allowedRoles.length > 0 && !allowedRoles.includes(user.role)){
+                return res.status(403).send({
+                    error: "Você não tem a permissão necessária para acessar está feature"
                 })
             }
 
