@@ -2,6 +2,7 @@ const sequelize = require("../config/sequelize");
 const Categories = require("./categories");
 const Products = require("./products");
 const Users = require("./users")
+const ProductsImages = require("./products_images");
 
 sequelize.sync()
     .then(() => console.log('Models sinconizados com sucesso!'))
@@ -10,5 +11,7 @@ sequelize.sync()
 module.exports = {
     Categories,
     Products,
-    Users
+    Users,
+    ProductsImages
+
 };
