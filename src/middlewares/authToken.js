@@ -1,7 +1,7 @@
 const jwt = require("jsonwebtoken");
 const { Users } = require("../models");
 
-function authToken(allowedRoles = [""]) {
+function authToken(allowedRoles = []) {
     return async (req, res, next) => {
         const token = req.headers.authorization;
 

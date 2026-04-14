@@ -17,7 +17,6 @@ const Products = sequelize.define("Products", {
     },
     original_price: {
         type: DataTypes.DECIMAL(10,2),
-        allowNull: false
     },
     category_id: {
         type: DataTypes.UUID,

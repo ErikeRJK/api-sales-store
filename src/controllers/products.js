@@ -1,4 +1,5 @@
 const productsModel = require("../models/products");// Importa o modelo de produtos para interagir com o banco de dados
+const { uploadAndSaveProductsImages } = require("../services/product-images-upload");
 
 async function getAllProducts(req, res){// Controlador para obter todos os produtos
      try {
@@ -26,8 +27,19 @@ async function createProduct(req, res) {// Controlador para criar um novo produt
         return: return_policy
      })
 
-     res.status(201).send(newProduct)
+     let images = []
+     try {
+      images = await uploadAndSaveProductsImages(newProduct.id, req.files)
+     } catch (error) {
+        console.error("Erro ao fazer upload das imagens", error.message)
+     }
+
+     res.status(201).send({
+      product: newProduct,
+      imaages: images.map(img => img.url)
+     })
    } catch (error) {
+      console.log(error)
      res.status(500).send({ error: "Erro ao criar produto." })
    }
 }
