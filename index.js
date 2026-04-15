@@ -11,7 +11,7 @@ require("./src/models")
 const Sentry = require("@sentry/node")
 
 const app = express();
-const port = 4505;
+const port = 4507;
 
 Sentry.setupExpressErrorHandler(app)
 
