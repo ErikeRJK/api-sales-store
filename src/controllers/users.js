@@ -1,28 +1,30 @@
-const {Users} = require("../models")
-const emailApi = require("../services/emailApi")
+const { Users } = require("../models");
+const { sendEmail } = require("../helpers/email-service");
+const { templateEmail } = require("../templates/welcome-email");
 
-async function createUser(req, res){
-        try {
-        await Users.create(req.body)
+async function createUser(req, res) {
+  try {
+    await Users.create(req.body);
 
-        await emailApi.post("/email/send", {
-            to: req.body.email,
-            toName: req.body.name,
-            subject: "Bem vindo ao nosso sistema",
-            html: "<p> Seja bem vindo <p>"
-        })
+    const template = await templateEmail(req.body.name, "https://youtube.com");
 
-        return res.status(201).send({
-            message: "Usuário criado com sucesso !"
-        })
-    } catch (error) {
-        console.log(error)
-        return res.status(500).send({
-            error: error.message
-        })
-    }
+    await sendEmail(
+      req.body.email,
+      req.body.name,
+      "Bem vindo ao nosso sistema",
+      template
+    );
+
+    return res.status(201).send({
+      message: "Usuário criado com sucesso !",
+    });
+  } catch (error) {
+    return res.status(500).send({
+      error: error.message,
+    });
+  }
 }
 
 module.exports = {
-    createUser
-}
+  createUser,
+};
