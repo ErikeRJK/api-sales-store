@@ -5,7 +5,7 @@ async function encryptUserToken(userId){
         const encryptUserId = CryptoJS.AES.encrypt(
             userId,
             process.env.ENCRYPT_SECRET
-        ).toString
+        ).toString()
 
         return encryptUserId
     } catch (error) {
