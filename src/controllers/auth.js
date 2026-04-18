@@ -1,4 +1,5 @@
 const jwt = require("jsonwebtoken")
+const { decryptUserToken } = require("../helpers/encrypt-user-token")
 
 async function login(req, res){
     try {
@@ -42,6 +43,22 @@ async function profile(req, res) {
             error: error.message
         })
     }
+}
+
+async function activeUser(req, res){
+    const {token} = req.body;
+
+    const cleanedToken = token.replace(/ /g, "+")
+
+    const userId = decryptUserToken(cleanedToken)
+
+    if(!userId){
+        return send.status(400).send({
+            error: "Token inválido"
+        })
+    }
+
+    
 }
 
 module.exports = {
