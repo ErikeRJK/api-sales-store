@@ -88,5 +88,6 @@ async function activeUser(req, res){
 
 module.exports = {
     login,
-    profile
+    profile,
+    activeUser
 }
