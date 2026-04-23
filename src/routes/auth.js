@@ -16,4 +16,9 @@ router.get(
     authController.profile
 )
 
+router.post(
+    "/active-user",
+    authController.activeUser
+)
+
 module.exports = router;
