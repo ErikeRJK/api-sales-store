@@ -1,8 +1,7 @@
 const jwt = require("jsonwebtoken")
 const { decryptUserToken } = require("../helpers/encrypt-user-token")
 const  redisClient  = require("../config/redis")
-const { Users } = require("../models/users")
-const { where } = require("sequelize")
+const { Users } = require("../models")
 
 async function login(req, res){
     try {
@@ -53,7 +52,7 @@ async function activeUser(req, res){
 
     const cleanedToken = token.replace(/ /g, "+")
 
-    const userId = decryptUserToken(cleanedToken)
+    const userId = await decryptUserToken(cleanedToken)
 
     if(!userId){
         return send.status(400).send({
@@ -77,13 +76,13 @@ async function activeUser(req, res){
         return res.send({
             message: "Usuário ativado com sucesso !"
         })
+        
     } catch (error) {
         return res.status(500).send({
             error: "Erro ao ativar usuário!"
         })
     }
 
-    
 }
 
 module.exports = {
