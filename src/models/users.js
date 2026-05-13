@@ -32,8 +32,14 @@ const Users = sequelize.define("Users", {
         type: DataTypes.BOOLEAN,
         allowNull: false,
         defaultValue: true
+    },
+    image: {
+        type: DataTypes.TEXT,
+        allowNull: true,
+        validate: {
+            isUrl: true
+        }
     }
-
 });
 
 module.exports = Users
