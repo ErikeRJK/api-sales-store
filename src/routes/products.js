@@ -6,7 +6,7 @@ const productsController = require("../controllers/products");
 const productMiddleware = require("../middlewares/products");
 const { authToken } = require("../middlewares/authToken");
 
-router.get("/productsAll", authToken(), productsController.getAllProducts);
+router.get("/products", productsController.getAllProducts);
 router.post("/products", authToken(["seller"]),productMiddleware.validateCreateProducts,productsController.createProduct)
 
 module.exports = router;
