@@ -8,5 +8,6 @@ const { authToken } = require("../middlewares/authToken");
 
 router.get("/products", productsController.getAllProducts);
 router.post("/products", authToken(["seller"]),productMiddleware.validateCreateProducts,productsController.createProduct)
+router.get("/products/:id", productsController.getProductById)
 
 module.exports = router;
